@@ -14,8 +14,8 @@
   "contributes": {
     "commands": [
       {
-        "command": "settings-organizer.helloWorld",
-        "title": "Hello World"
+        "command": "extension.settings-organizer",
+        "title": "Settings Organizer"
       }
     ]
   },

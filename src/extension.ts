@@ -1,26 +1,75 @@
-// The module 'vscode' contains the VS Code extensibility API
-// Import the module and reference it with the alias vscode in your code below
 import * as vscode from 'vscode';
+import * as fs from 'fs';
+import * as path from 'path';
 
-// This method is called when your extension is activated
-// Your extension is activated the very first time the command is executed
 export function activate(context: vscode.ExtensionContext) {
+    let disposable = vscode.commands.registerCommand('extension.settings-organizer', () => {
+        const appData = process.env.APPDATA || process.env.HOME || '';
+        const userSettingsPath = path.join(appData, 'Code', 'User', 'settings.json');
+        // Log the path for debugging
+        console.log(`Looking for settings.json at: ${userSettingsPath}`);
 
-	// Use the console to output diagnostic information (console.log) and errors (console.error)
-	// This line of code will only be executed once when your extension is activated
-	console.log('Congratulations, your extension "settings-organizer" is now active!');
+        if (fs.existsSync(userSettingsPath)) {
+            const settings = JSON.parse(fs.readFileSync(userSettingsPath, 'utf-8'));
+            const categorizedSettings = categorizeSettings(settings);
+            fs.writeFileSync(userSettingsPath, JSON.stringify(categorizedSettings, null, 2));
+            vscode.window.showInformationMessage('Global settings.json organized!');
+        } else {
+            vscode.window.showErrorMessage('Global settings.json not found!');
+        }
+    });
 
-	// The command has been defined in the package.json file
-	// Now provide the implementation of the command with registerCommand
-	// The commandId parameter must match the command field in package.json
-	const disposable = vscode.commands.registerCommand('settings-organizer.helloWorld', () => {
-		// The code you place here will be executed every time your command is executed
-		// Display a message box to the user
-		vscode.window.showInformationMessage('Hello World from Settings Organizer!');
-	});
-
-	context.subscriptions.push(disposable);
+    context.subscriptions.push(disposable);
 }
 
-// This method is called when your extension is deactivated
-export function deactivate() {}
+export function deactivate() { }
+
+function categorizeSettings(settings: any) {
+    const sortedSettings: { [key: string]: any } = {};
+    const categoriesOrder = [
+        "window",
+        "workbench",
+        "security",
+        "explorer",
+        "terminal",
+        "editor",
+        "git",
+        "extensions",
+        "remote",
+    ];
+
+    // Sort settings based on categories
+    categoriesOrder.forEach(category => {
+        for (const key in settings) {
+            if (key.startsWith(category)) {
+                sortedSettings[key] = settings[key];
+            }
+        }
+    });
+
+    // Add language-specific settings
+    const languageSettings: { [key: string]: any } = {};
+    for (const key in settings) {
+        if (key.startsWith("[") && key.endsWith("]")) {
+            languageSettings[key] = settings[key];
+        }
+    }
+
+    // Sort language-specific settings alphabetically
+    const sortedLanguageSettingsKeys = Object.keys(languageSettings).sort();
+    sortedLanguageSettingsKeys.forEach(key => {
+        sortedSettings[key] = languageSettings[key];
+    });
+
+    // Add any miscellaneous settings that don't fit into categories
+    for (const key in settings) {
+        if (
+            !categoriesOrder.some(category => key.startsWith(category)) &&
+            !(key.startsWith("[") && key.endsWith("]"))
+        ) {
+            sortedSettings[key] = settings[key];
+        }
+    }
+
+    return sortedSettings;
+}
