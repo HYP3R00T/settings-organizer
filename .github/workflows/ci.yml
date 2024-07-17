@@ -29,12 +29,26 @@ jobs:
           npm install -g vsce
           vsce package
 
+      - name: Auto-increment version and tag
+        id: versioning
+        run: |
+          # Increment the version and create a new tag
+          NEW_VERSION=$(npm version patch -m "Release version %s")
+          echo "New version: $NEW_VERSION"
+          # Output the new tag
+          echo "new_tag=$NEW_VERSION" >> $GITHUB_ENV
+
+      - name: Push changes
+        run: |
+          git push origin HEAD
+          git push origin ${{ env.new_tag }}
+
       - name: Create Release
         id: create_release
         uses: ncipollo/release-action@v1
         with:
-          tag: v${{ github.ref_name }}
-          name: Release ${{ github.ref }}
+          tag: v${{ env.new_tag }}
+          name: Release ${{ env.new_tag }}
           artifacts: ./*.vsix
           draft: false
           prerelease: false
