@@ -24,6 +24,11 @@ jobs:
       - name: Install dependencies
         run: npm install
 
+      - name: Bump version
+        run: |
+          npm version patch  # Change to minor/major as needed
+          git push origin main --tags  # Push the new tag
+
       - name: Package VSCode extension
         run: |
           npm install -g vsce
@@ -33,8 +38,8 @@ jobs:
         id: create_release
         uses: ncipollo/release-action@v1
         with:
-          tag: ${{ github.ref_name }}
-          name: Release ${{ github.ref_name }}
+          tag: ${{ github.ref }}
+          name: Release ${{ github.ref }}
           artifacts: ./*.vsix
           draft: false
           prerelease: false
