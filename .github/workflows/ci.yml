@@ -24,6 +24,11 @@ jobs:
       - name: Install dependencies
         run: npm install
 
+      - name: Configure Git
+        run: |
+          git config --global user.email "rajesh@hyperoot.dev"
+          git config --global user.name "hyp3r00t"
+
       - name: Package VSCode extension
         run: |
           npm install -g vsce
