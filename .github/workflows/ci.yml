@@ -33,8 +33,8 @@ jobs:
         id: create_release
         uses: ncipollo/release-action@v1
         with:
-          tag: ${{ github.ref }}
-          name: Release ${{ github.ref }}
-          assets: ./*.vsix
+          tag: ${{ github.ref_name }}
+          name: Release ${{ github.ref_name }}
+          artifacts: ./*.vsix
           draft: false
           prerelease: false
