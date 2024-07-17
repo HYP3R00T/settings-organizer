@@ -11,7 +11,7 @@
     "type": "git",
     "url": "git+https://github.com/HYP3R00T/settings-organizer.git"
   },
-  "icon": "./images/logo.png",
+  "icon": "images/logo.png",
   "engines": {
     "vscode": "^1.91.0"
   },
