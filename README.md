@@ -5,5 +5,11 @@ Settings Organizer is a simple yet powerful VSCode extension designed to keep yo
 ## Features
 
 - Sort global `settings.json` of Visual Studio Code categorically.
+- Sort local `settings.json` of Visual Studio Code categorically.
+
+## Usage
+
+- Open the command palette (Ctrl+Shift+P on Windows and Linux, Cmd+Shift+P on OS X) and search for `Settings Organizer`.
+- Select the `global` or `local` option based on which file you want to reorganize.
 
 **Enjoy!**

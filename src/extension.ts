@@ -3,9 +3,10 @@ import * as fs from 'fs';
 import * as path from 'path';
 
 export function activate(context: vscode.ExtensionContext) {
-    let disposable = vscode.commands.registerCommand('extension.settings-organizer', () => {
+    let settings_organizer_global = vscode.commands.registerCommand('extension.settings-organizer-global', () => {
         const appData = process.env.APPDATA || process.env.HOME || '';
         const userSettingsPath = path.join(appData, 'Code', 'User', 'settings.json');
+
         // Log the path for debugging
         console.log(`Looking for settings.json at: ${userSettingsPath}`);
 
@@ -18,8 +19,29 @@ export function activate(context: vscode.ExtensionContext) {
             vscode.window.showErrorMessage('Global settings.json not found!');
         }
     });
+    let settings_organizer_local = vscode.commands.registerCommand('extension.settings-organizer-local', () => {
+        const workspaceFolders = vscode.workspace.workspaceFolders;
+        if (!workspaceFolders) {
+            vscode.window.showErrorMessage('No workspace folder is open.');
+            return;
+        }
+        const userSettingsPath = path.join(workspaceFolders[0].uri.fsPath, '.vscode', 'settings.json');
 
-    context.subscriptions.push(disposable);
+        // Log the path for debugging
+        console.log(`Looking for settings.json at: ${userSettingsPath}`);
+
+        if (fs.existsSync(userSettingsPath)) {
+            const settings = JSON.parse(fs.readFileSync(userSettingsPath, 'utf-8'));
+            const categorizedSettings = categorizeSettings(settings);
+            fs.writeFileSync(userSettingsPath, JSON.stringify(categorizedSettings, null, 2));
+            vscode.window.showInformationMessage('Local settings.json organized!');
+        } else {
+            vscode.window.showErrorMessage('Local settings.json not found!');
+        }
+    });
+
+    context.subscriptions.push(settings_organizer_global);
+    context.subscriptions.push(settings_organizer_local);
 }
 
 export function deactivate() { }

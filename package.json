@@ -1,8 +1,8 @@
 {
   "name": "settings-organizer",
   "displayName": "Settings Organizer",
-  "description": "Settings Organizer is a simple yet powerful VSCode extension designed to keep your settings.json file clean and organized. It categorizes settings based on common patterns, ensuring your configuration file remains neat and easy to navigate. No more messy settings.json files—keep your workspace tidy and efficient with just a single command!",
-  "version": "0.0.4",
+  "description": "Settings Organizer keeps your VSCode settings.json file neat and organized with a single command. Categorize settings effortlessly for a clean and efficient workspace!",
+  "version": "0.0.5",
   "publisher": "hyperoot",
   "publishConfig": {
     "registry": "https://npm.pkg.github.com/"
@@ -23,8 +23,12 @@
   "contributes": {
     "commands": [
       {
-        "command": "extension.settings-organizer",
-        "title": "Settings Organizer"
+        "command": "extension.settings-organizer-global",
+        "title": "Settings Organizer: Global"
+      },
+      {
+        "command": "extension.settings-organizer-local",
+        "title": "Settings Organizer: Local"
       }
     ]
   },
