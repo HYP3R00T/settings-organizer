@@ -52,7 +52,7 @@ jobs:
         id: create_release
         uses: ncipollo/release-action@v1
         with:
-          tag: v${{ env.new_tag }}
+          tag: ${{ env.new_tag }}
           name: Release ${{ env.new_tag }}
           artifacts: ./*.vsix
           draft: false
