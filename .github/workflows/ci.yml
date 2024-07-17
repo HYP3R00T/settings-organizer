@@ -1,11 +1,11 @@
 name: Release new package
-on: 
+on:
   push:
     branches:
       - master
     tags:
-      - 'v*'
-    
+      - "v*"
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -19,8 +19,8 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '18'
-        
+          node-version: "18"
+
       - name: Install dependencies
         run: npm install
 
@@ -28,11 +28,6 @@ jobs:
         run: |
           git config --global user.email "rajesh@hyperoot.dev"
           git config --global user.name "hyp3r00t"
-
-      - name: Package VSCode extension
-        run: |
-          npm install -g vsce
-          vsce package
 
       - name: Auto-increment version and tag
         id: versioning
@@ -47,6 +42,11 @@ jobs:
         run: |
           git push origin HEAD
           git push origin ${{ env.new_tag }}
+
+      - name: Package VSCode extension
+        run: |
+          npm install -g vsce
+          vsce package
 
       - name: Create Release
         id: create_release
