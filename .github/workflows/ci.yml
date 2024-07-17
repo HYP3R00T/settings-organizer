@@ -1,0 +1,41 @@
+name: Release new package
+on: 
+  push:
+    branches:
+      - master
+    tags:
+      - 'v*'
+  workflow_run:
+    
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+        
+      - name: Install dependencies
+        run: npm install
+
+      - name: Package VSCode extension
+        run: |
+          npm install -g vsce
+          vsce package
+
+      - name: Create Release
+        id: create_release
+        uses: ncipollo/release-action@v1
+        with:
+          tag: ${{ github.ref }}
+          name: Release ${{ github.ref }}
+          assets: ./*.vsix
+          draft: false
+          prerelease: false

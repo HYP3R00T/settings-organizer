@@ -1,7 +1,7 @@
 {
   "name": "settings-organizer",
   "displayName": "Settings Organizer",
-  "description": "Settings Organizer keeps your VSCode settings.json file neat and organized with a single command. Categorize settings effortlessly for a clean and efficient workspace!",
+  "description": "Automatically organize and tidy up your VSCode settings.json file.",
   "version": "0.0.5",
   "publisher": "hyperoot",
   "publishConfig": {
