@@ -24,11 +24,6 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      - name: Bump version
-        run: |
-          npm version patch  # Change to minor/major as needed
-          git push origin main --tags  # Push the new tag
-
       - name: Package VSCode extension
         run: |
           npm install -g vsce
