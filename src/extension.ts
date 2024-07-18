@@ -11,7 +11,9 @@ export function activate(context: vscode.ExtensionContext) {
         console.log(`Looking for settings.json at: ${userSettingsPath}`);
 
         if (fs.existsSync(userSettingsPath)) {
-            const settings = JSON.parse(fs.readFileSync(userSettingsPath, 'utf-8'));
+            const rawSettings = fs.readFileSync(userSettingsPath, 'utf-8');
+            const cleanedSettings = preprocessJSON(rawSettings);
+            const settings = JSON.parse(cleanedSettings);
             const categorizedSettings = categorizeSettings(settings);
             fs.writeFileSync(userSettingsPath, JSON.stringify(categorizedSettings, null, 2));
             vscode.window.showInformationMessage('Global settings.json organized!');
@@ -19,6 +21,7 @@ export function activate(context: vscode.ExtensionContext) {
             vscode.window.showErrorMessage('Global settings.json not found!');
         }
     });
+
     let settings_organizer_local = vscode.commands.registerCommand('extension.settings-organizer-local', () => {
         const workspaceFolders = vscode.workspace.workspaceFolders;
         if (!workspaceFolders) {
@@ -31,7 +34,9 @@ export function activate(context: vscode.ExtensionContext) {
         console.log(`Looking for settings.json at: ${userSettingsPath}`);
 
         if (fs.existsSync(userSettingsPath)) {
-            const settings = JSON.parse(fs.readFileSync(userSettingsPath, 'utf-8'));
+            const rawSettings = fs.readFileSync(userSettingsPath, 'utf-8');
+            const cleanedSettings = preprocessJSON(rawSettings);
+            const settings = JSON.parse(cleanedSettings);
             const categorizedSettings = categorizeSettings(settings);
             fs.writeFileSync(userSettingsPath, JSON.stringify(categorizedSettings, null, 2));
             vscode.window.showInformationMessage('Local settings.json organized!');
@@ -45,6 +50,14 @@ export function activate(context: vscode.ExtensionContext) {
 }
 
 export function deactivate() { }
+
+function preprocessJSON(jsonString: string): string {
+    // Remove comments
+    jsonString = jsonString.replace(/\/\/.*$/gm, '');
+    // Remove trailing commas
+    jsonString = jsonString.replace(/,(\s*[}\]])/g, '$1');
+    return jsonString;
+}
 
 function categorizeSettings(settings: any) {
     const sortedSettings: { [key: string]: any } = {};
