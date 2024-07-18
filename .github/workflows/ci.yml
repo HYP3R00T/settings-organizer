@@ -57,3 +57,9 @@ jobs:
           artifacts: ./*.vsix
           draft: false
           prerelease: false
+
+      - name: Publish to VSCode Marketplace
+        env:
+          VSCE_TOKEN: ${{ secrets.VSCE_TOKEN }}
+        run: |
+          vsce publish -p $VSCE_TOKEN
