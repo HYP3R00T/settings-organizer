@@ -1,18 +1,40 @@
 import * as vscode from "vscode";
 import * as fs from "fs";
 import * as path from "path";
+import * as os from "os";
 
 export function activate(context: vscode.ExtensionContext) {
   let settings_organizer_global = vscode.commands.registerCommand(
     "extension.settings-organizer-global",
     () => {
-      const appData = process.env.APPDATA || process.env.HOME || "";
-      const userSettingsPath = path.join(
-        appData,
-        "Code",
-        "User",
-        "settings.json"
-      );
+      const platform = os.platform();
+      let userSettingsPath = "";
+
+      if (platform === "win32") {
+        userSettingsPath = path.join(
+          process.env.APPDATA || "",
+          "Code",
+          "User",
+          "settings.json"
+        );
+      } else if (platform === "darwin") {
+        userSettingsPath = path.join(
+          process.env.HOME || "",
+          "Library",
+          "Application Support",
+          "Code",
+          "User",
+          "settings.json"
+        );
+      } else if (platform === "linux") {
+        userSettingsPath = path.join(
+          process.env.HOME || "",
+          ".config",
+          "Code",
+          "User",
+          "settings.json"
+        );
+      }
 
       // Log the path for debugging
       console.log(`Looking for settings.json at: ${userSettingsPath}`);
