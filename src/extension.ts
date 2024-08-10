@@ -109,11 +109,31 @@ function categorizeSettings(settings: any) {
     "remote",
   ];
 
+  // Helper function to recursively sort objects
+  function sortObject(obj: any): any {
+    if (typeof obj !== "object" || obj === null) {
+      return obj;
+    }
+
+    if (Array.isArray(obj)) {
+      return obj.map(sortObject);
+    }
+
+    const sorted: { [key: string]: any } = {};
+    Object.keys(obj)
+      .sort()
+      .forEach((key) => {
+        sorted[key] = sortObject(obj[key]);
+      });
+
+    return sorted;
+  }
+
   // Sort settings based on categories
   categoriesOrder.forEach((category) => {
     for (const key in settings) {
       if (key.startsWith(category)) {
-        sortedSettings[key] = settings[key];
+        sortedSettings[key] = sortObject(settings[key]);
       }
     }
   });
@@ -126,21 +146,28 @@ function categorizeSettings(settings: any) {
     }
   }
 
-  // Sort language-specific settings alphabetically
+  // Sort language-specific settings alphabetically and their nested objects
   const sortedLanguageSettingsKeys = Object.keys(languageSettings).sort();
   sortedLanguageSettingsKeys.forEach((key) => {
-    sortedSettings[key] = languageSettings[key];
+    sortedSettings[key] = sortObject(languageSettings[key]);
   });
 
   // Add any miscellaneous settings that don't fit into categories
+  const miscellaneousSettings: { [key: string]: any } = {};
   for (const key in settings) {
     if (
       !categoriesOrder.some((category) => key.startsWith(category)) &&
       !(key.startsWith("[") && key.endsWith("]"))
     ) {
-      sortedSettings[key] = settings[key];
+      miscellaneousSettings[key] = settings[key];
     }
   }
+
+  // Sort miscellaneous settings alphabetically
+  const sortedMiscellaneousKeys = Object.keys(miscellaneousSettings).sort();
+  sortedMiscellaneousKeys.forEach((key) => {
+    sortedSettings[key] = miscellaneousSettings[key];
+  });
 
   return sortedSettings;
 }
