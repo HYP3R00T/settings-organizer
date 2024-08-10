@@ -2,6 +2,7 @@ import * as vscode from "vscode";
 import * as fs from "fs";
 import * as path from "path";
 import * as os from "os";
+import * as cjson from "comment-json";
 
 export function activate(context: vscode.ExtensionContext) {
   let settings_organizer_global = vscode.commands.registerCommand(
@@ -41,12 +42,12 @@ export function activate(context: vscode.ExtensionContext) {
 
       if (fs.existsSync(userSettingsPath)) {
         const rawSettings = fs.readFileSync(userSettingsPath, "utf-8");
-        const cleanedSettings = preprocessJSON(rawSettings);
-        const settings = JSON.parse(cleanedSettings);
+        const settings = cjson.parse(rawSettings);
+        console.log(settings);
         const categorizedSettings = categorizeSettings(settings);
         fs.writeFileSync(
           userSettingsPath,
-          JSON.stringify(categorizedSettings, null, 2)
+          cjson.stringify(categorizedSettings, null, 2)
         );
         vscode.window.showInformationMessage("Global settings.json organized!");
       } else {
@@ -74,12 +75,12 @@ export function activate(context: vscode.ExtensionContext) {
 
       if (fs.existsSync(userSettingsPath)) {
         const rawSettings = fs.readFileSync(userSettingsPath, "utf-8");
-        const cleanedSettings = preprocessJSON(rawSettings);
-        const settings = JSON.parse(cleanedSettings);
+        const settings = cjson.parse(rawSettings);
+        console.log(settings);
         const categorizedSettings = categorizeSettings(settings);
         fs.writeFileSync(
           userSettingsPath,
-          JSON.stringify(categorizedSettings, null, 2)
+          cjson.stringify(categorizedSettings, null, 2)
         );
         vscode.window.showInformationMessage("Local settings.json organized!");
       } else {
@@ -93,14 +94,6 @@ export function activate(context: vscode.ExtensionContext) {
 }
 
 export function deactivate() {}
-
-function preprocessJSON(jsonString: string): string {
-  // Remove comments
-  jsonString = jsonString.replace(/\/\/.*$/gm, "");
-  // Remove trailing commas
-  jsonString = jsonString.replace(/,(\s*[}\]])/g, "$1");
-  return jsonString;
-}
 
 function categorizeSettings(settings: any) {
   const sortedSettings: { [key: string]: any } = {};
