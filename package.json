@@ -2,7 +2,7 @@
   "name": "settings-organizer",
   "displayName": "Settings Organizer",
   "description": "Automatically organize and tidy up your VSCode settings.json file.",
-  "version": "0.0.18",
+  "version": "0.0.19",
   "publisher": "hyperoot",
   "publishConfig": {
     "registry": "https://npm.pkg.github.com/"
@@ -22,7 +22,6 @@
   "main": "./out/extension.js",
   "contributes": {
     "commands": [
-
       {
         "command": "extension.settings-organizer",
         "title": "Settings Organizer"
