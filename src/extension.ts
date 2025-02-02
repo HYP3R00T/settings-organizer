@@ -8,7 +8,7 @@ export function activate(context: vscode.ExtensionContext) {
   let settings_organizer_global = vscode.commands.registerCommand(
     "extension.settings-organizer-global",
     () => {
-      const platform = os.platform();
+      const platform = detectPlatform();
       let userSettingsPath = "";
 
       if (platform === "win32") {
@@ -27,6 +27,15 @@ export function activate(context: vscode.ExtensionContext) {
           "User",
           "settings.json"
         );
+      } else if (platform === "wsl2") {
+        const windowsUsername = getWindowsUsername();
+        if (windowsUsername) {
+          userSettingsPath = path.join(
+            "/mnt/c/Users",
+            windowsUsername,
+            "AppData/Roaming/Code/User/settings.json"
+          );
+        }
       } else if (platform === "linux") {
         userSettingsPath = path.join(
           process.env.HOME || "",
@@ -40,7 +49,7 @@ export function activate(context: vscode.ExtensionContext) {
       // Log the path for debugging
       console.log(`Looking for settings.json at: ${userSettingsPath}`);
 
-      if (fs.existsSync(userSettingsPath)) {
+      if (userSettingsPath && fs.existsSync(userSettingsPath)) {
         const rawSettings = fs.readFileSync(userSettingsPath, "utf-8");
         const settings = cjson.parse(rawSettings);
         console.log(settings);
@@ -170,4 +179,47 @@ function categorizeSettings(settings: any) {
   });
 
   return sortedSettings;
+}
+
+function detectPlatform(): string {
+  const platform = os.platform();
+
+  if (platform === "linux") {
+    try {
+      const version = fs.readFileSync("/proc/version", "utf-8").toLowerCase();
+      if (version.includes("microsoft") && version.includes("wsl2")) {
+        return "wsl2";
+      } else if (version.includes("microsoft")) {
+        return "wsl1";
+      }
+    } catch (error) {
+      console.error("Error reading /proc/version:", error);
+    }
+  }
+
+  return platform;
+}
+
+function getWindowsUsername(): string | null {
+  try {
+    const mntCUsers = "/mnt/c/Users";
+    if (fs.existsSync(mntCUsers)) {
+      const users = fs.readdirSync(mntCUsers);
+      // Find the first non-default user (ignoring Public, Default, etc.)
+      for (const user of users) {
+        if (
+          user !== "Public" &&
+          user !== "Default" &&
+          user !== "Default User" &&
+          user !== "All Users" &&
+          user !== "desktop.ini"
+        ) {
+          return user; // Return the first valid username
+        }
+      }
+    }
+  } catch (error) {
+    console.error("Error retrieving Windows username:", error);
+  }
+  return null;
 }
