@@ -5,17 +5,67 @@
 <img alt="VSCode Marketplace downloads" src="https://img.shields.io/visual-studio-marketplace/i/hyperoot.settings-organizer?style=for-the-badge&labelColor=%23363a4f&color=%23b7bdf8">
 </p>
 
-Settings Organizer is a simple yet powerful VSCode extension designed to keep your settings.json file clean and organized. It categorizes settings based on common patterns, ensuring your configuration file remains neat and easy to navigate. No more messy settings.json files—keep your workspace tidy and efficient with just a single command!
+# Settings Organizer for VS Code
+
+The **Settings Organizer** extension for VS Code allows users to efficiently manage and organize their `settings.json` files for different environments. This extension supports:
+
+- **Global Settings** (User-wide configuration)
+- **Local Workspace Settings** (`.vscode/settings.json` for individual projects)
+- **Manual Selection** (allows entering a custom settings file path)
 
 ## Features
 
-- Sort global `settings.json` of Visual Studio Code categorically.
-- Sort local `settings.json` of Visual Studio Code categorically.
-- Keep the comments intact, even after sorting.
+- Automatically detects and organizes `settings.json` files.
+- Supports multiple environments (Windows, macOS, Linux, WSL2).
+- Categorizes settings into logical groups for better readability.
+- Provides an interactive command palette menu for easy selection.
+- Allows manual path entry for settings files outside the default locations.
+
+## Installation
+
+1. Download and install the extension from the VS Code Marketplace (or manually load it in `extensions` folder).
+2. Reload VS Code if necessary.
 
 ## Usage
 
-- Open the command palette (Ctrl+Shift+P on Windows and Linux, Cmd+Shift+P on OS X) and search for `Settings Organizer`.
-- Select the `global` or `local` option based on which file you want to reorganize.
+### Command Palette
 
-**Enjoy!**
+1. Open the **Command Palette** (`Ctrl+Shift+P` / `Cmd+Shift+P` on macOS).
+2. Search for `Settings Organizer` and select it.
+3. Choose one of the available options:
+   - **Organize Global Settings**: Sorts `settings.json` in the global user folder.
+   - **Organize Local Workspace Settings**: Sorts `settings.json` inside the workspace `.vscode` folder.
+   - **Manual Path Entry**: If a settings file is not found, you can enter a custom path.
+
+## How It Works
+
+1. Reads the `settings.json` file from the selected environment.
+2. Categorizes settings into predefined groups in the following order:
+    - `window`: Window management settings
+    - `workbench`: UI and layout settings
+    - `security`: Security-related configurations
+    - `explorer`: File explorer settings
+    - `terminal`: Terminal behavior and appearance
+    - `editor`: Code editor preferences
+    - `git`: Git integration settings
+    - `extensions`: Extension-related configurations
+    - `remote`: Remote development settings
+
+    Additionally, it separately organizes language-specific settings and miscellaneous settings that do not fall under the predefined categories.
+3. Sorts language-specific and miscellaneous settings separately.
+4. Saves the organized settings back to the file.
+
+## Supported Platforms
+
+- Windows
+- macOS
+- Linux
+- WSL2
+
+## Contributing
+
+Feel free to submit issues or PRs for improvements!
+
+## License
+
+[MIT License](LICENSE)

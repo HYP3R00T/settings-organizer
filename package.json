@@ -22,13 +22,10 @@
   "main": "./out/extension.js",
   "contributes": {
     "commands": [
+
       {
-        "command": "extension.settings-organizer-global",
-        "title": "Settings Organizer: Global"
-      },
-      {
-        "command": "extension.settings-organizer-local",
-        "title": "Settings Organizer: Local"
+        "command": "extension.settings-organizer",
+        "title": "Settings Organizer"
       }
     ]
   },
