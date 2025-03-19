@@ -51,7 +51,7 @@ function getUserSettingsPath() {
   if (platform === "win32") {
     userSettingsPath = path.join(
       process.env.APPDATA || "",
-      "Code",
+      (isInsidersVersion() ? "Code - Insiders" : "Code"),
       "User",
       "settings.json"
     );
@@ -60,7 +60,7 @@ function getUserSettingsPath() {
       process.env.HOME || "",
       "Library",
       "Application Support",
-      "Code",
+      (isInsidersVersion() ? "Code - Insiders" : "Code"),
       "User",
       "settings.json"
     );
@@ -70,7 +70,7 @@ function getUserSettingsPath() {
       userSettingsPath = path.join(
         "/mnt/c/Users",
         windowsUsername,
-        "AppData/Roaming/Code/User/settings.json"
+        (isInsidersVersion() ? "AppData/Roaming/Code - Insiders/User/settings.json" : "AppData/Roaming/Code/User/settings.json"),
       );
     }
   } else if (platform === "linux") {
