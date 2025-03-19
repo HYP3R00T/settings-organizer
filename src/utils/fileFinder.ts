@@ -41,6 +41,10 @@ export async function getManualPath(): Promise<string | null> {
   return null;
 }
 
+function isInsidersVersion() {
+  return vscode.version.includes("-insider");
+}
+
 function getUserSettingsPath() {
   const platform = detectPlatform();
   let userSettingsPath = "";
@@ -73,7 +77,7 @@ function getUserSettingsPath() {
     userSettingsPath = path.join(
       process.env.HOME || "",
       ".config",
-      "Code",
+      (isInsidersVersion() ? "Code - Insiders" : "Code"),
       "User",
       "settings.json"
     );
