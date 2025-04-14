@@ -1,6 +1,6 @@
-import * as vscode from "vscode";
-import * as fs from "fs";
-import * as cjson from "comment-json";
+import * as vscode from 'vscode';
+import * as fs from 'fs';
+import * as cjson from 'comment-json';
 
 export function organizeSettings(filePath: string | null) {
   if (!filePath || !fs.existsSync(filePath)) {
@@ -8,7 +8,7 @@ export function organizeSettings(filePath: string | null) {
     return;
   }
 
-  const rawSettings = fs.readFileSync(filePath, "utf-8");
+  const rawSettings = fs.readFileSync(filePath, 'utf-8');
   const settings = cjson.parse(rawSettings);
   const categorizedSettings = categorizeSettings(settings);
   fs.writeFileSync(filePath, cjson.stringify(categorizedSettings, null, 2));
@@ -19,20 +19,20 @@ export function organizeSettings(filePath: string | null) {
 export function categorizeSettings(settings: any) {
   const sortedSettings: { [key: string]: any } = {};
   const categoriesOrder = [
-    "window",
-    "workbench",
-    "security",
-    "explorer",
-    "terminal",
-    "editor",
-    "git",
-    "extensions",
-    "remote",
+    'window',
+    'workbench',
+    'security',
+    'explorer',
+    'terminal',
+    'editor',
+    'git',
+    'extensions',
+    'remote',
   ];
 
   // Helper function to recursively sort objects
   function sortObject(obj: any): any {
-    if (typeof obj !== "object" || obj === null) {
+    if (typeof obj !== 'object' || obj === null) {
       return obj;
     }
 
@@ -62,7 +62,7 @@ export function categorizeSettings(settings: any) {
   // Add language-specific settings
   const languageSettings: { [key: string]: any } = {};
   for (const key in settings) {
-    if (key.startsWith("[") && key.endsWith("]")) {
+    if (key.startsWith('[') && key.endsWith(']')) {
       languageSettings[key] = settings[key];
     }
   }
@@ -78,7 +78,7 @@ export function categorizeSettings(settings: any) {
   for (const key in settings) {
     if (
       !categoriesOrder.some((category) => key.startsWith(category)) &&
-      !(key.startsWith("[") && key.endsWith("]"))
+      !(key.startsWith('[') && key.endsWith(']'))
     ) {
       miscellaneousSettings[key] = settings[key];
     }
