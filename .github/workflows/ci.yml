@@ -29,6 +29,11 @@ jobs:
           git config --global user.email "rajesh@hyperoot.dev"
           git config --global user.name "hyp3r00t"
 
+      - name: Ensure clean working directory
+        run: |
+          git add -A
+          git diff --cached --quiet || git commit -m "chore: commit uncommitted changes before version bump"
+
       - name: Auto-increment version and tag
         id: versioning
         run: |
