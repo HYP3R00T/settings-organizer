@@ -3,7 +3,7 @@ import {
   getSettingsPath,
   getLocalSettingsPath,
   getManualPath,
-} from '@/utils/fileFinder';
+} from './utils/fileFinder';
 import { organizeSettings } from './utils/organizer';
 
 export function activate(context: vscode.ExtensionContext) {

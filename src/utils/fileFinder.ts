@@ -1,7 +1,7 @@
 import * as vscode from 'vscode';
 import * as fs from 'fs';
 import * as path from 'path';
-import { detectPlatform, getWindowsUsername } from '@/utils/system';
+import { detectPlatform, getWindowsUsername } from './system';
 
 export async function getSettingsPath(): Promise<string | null> {
   let defaultPath = getUserSettingsPath();
@@ -32,10 +32,15 @@ export async function getManualPath(): Promise<string | null> {
     canSelectFiles: true,
     canSelectMany: false,
     canSelectFolders: false,
+    filters: {
+      'JSON files': ['json'],
+      'All files': ['*']
+    },
+    openLabel: 'Select settings.json file'
   });
 
   if (path) {
-    return path[0].path;
+    return path[0].fsPath;
   }
 
   return null;
