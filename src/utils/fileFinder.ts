@@ -69,6 +69,15 @@ function getUserSettingsPath() {
       'User',
       'settings.json',
     );
+    if (!fs.existsSync(userSettingsPath) && process.env.VSCODE_PORTABLE) {
+      userSettingsPath = path.join(
+        process.env.VSCODE_PORTABLE,
+        'user-data',
+        'User',
+        'settings.json',
+      );
+    }
+    console.log(userSettingsPath);
   } else if (platform === 'wsl2') {
     const windowsUsername = getWindowsUsername();
     if (windowsUsername) {
