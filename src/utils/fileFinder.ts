@@ -50,53 +50,74 @@ function isInsidersVersion() {
   return vscode.version.includes('-insider');
 }
 
+function isPortableMode() {
+  if (process.env.VSCODE_PORTABLE) {
+    return path.join(
+      process.env.VSCODE_PORTABLE,
+      'user-data',
+      'User',
+      'settings.json',
+    );
+  }
+  return null;
+}
+
 function getUserSettingsPath() {
   const platform = detectPlatform();
+  const portablePath = isPortableMode();
+
   let userSettingsPath = '';
   if (platform === 'win32') {
-    userSettingsPath = path.join(
-      process.env.APPDATA || '',
-      isInsidersVersion() ? 'Code - Insiders' : 'Code',
-      'User',
-      'settings.json',
-    );
-  } else if (platform === 'darwin') {
-    userSettingsPath = path.join(
-      process.env.HOME || '',
-      'Library',
-      'Application Support',
-      isInsidersVersion() ? 'Code - Insiders' : 'Code',
-      'User',
-      'settings.json',
-    );
-    if (!fs.existsSync(userSettingsPath) && process.env.VSCODE_PORTABLE) {
+    if (portablePath) {
+      userSettingsPath = portablePath;
+    } else {
       userSettingsPath = path.join(
-        process.env.VSCODE_PORTABLE,
-        'user-data',
+        process.env.APPDATA || '',
+        isInsidersVersion() ? 'Code - Insiders' : 'Code',
         'User',
         'settings.json',
       );
     }
-    console.log(userSettingsPath);
+  } else if (platform === 'darwin') {
+    if (portablePath) {
+      userSettingsPath = portablePath;
+    } else {
+      userSettingsPath = path.join(
+        process.env.HOME || '',
+        'Library',
+        'Application Support',
+        isInsidersVersion() ? 'Code - Insiders' : 'Code',
+        'User',
+        'settings.json',
+      );
+    }
   } else if (platform === 'wsl2') {
     const windowsUsername = getWindowsUsername();
     if (windowsUsername) {
-      userSettingsPath = path.join(
-        '/mnt/c/Users',
-        windowsUsername,
-        isInsidersVersion()
-          ? 'AppData/Roaming/Code - Insiders/User/settings.json'
-          : 'AppData/Roaming/Code/User/settings.json',
-      );
+      if (portablePath) {
+        userSettingsPath = portablePath;
+      } else {
+        userSettingsPath = path.join(
+          '/mnt/c/Users',
+          windowsUsername,
+          isInsidersVersion()
+            ? 'AppData/Roaming/Code - Insiders/User/settings.json'
+            : 'AppData/Roaming/Code/User/settings.json',
+        );
+      }
     }
   } else if (platform === 'linux') {
-    userSettingsPath = path.join(
-      process.env.HOME || '',
-      '.config',
-      isInsidersVersion() ? 'Code - Insiders' : 'Code',
-      'User',
-      'settings.json',
-    );
+    if (portablePath) {
+      userSettingsPath = portablePath;
+    } else {
+      userSettingsPath = path.join(
+        process.env.HOME || '',
+        '.config',
+        isInsidersVersion() ? 'Code - Insiders' : 'Code',
+        'User',
+        'settings.json',
+      );
+    }
   }
 
   return userSettingsPath;
