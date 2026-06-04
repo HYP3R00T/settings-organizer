@@ -26,8 +26,8 @@ jobs:
 
       - name: Configure Git
         run: |
-          git config --global user.email "rajesh@hyperoot.dev"
-          git config --global user.name "hyp3r00t"
+          git config --global user.email "hyperoot.tech@proton.me"
+          git config --global user.name "Rajesh"
 
       - name: Ensure clean working directory
         run: |
