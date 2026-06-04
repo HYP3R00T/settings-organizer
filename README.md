@@ -2,7 +2,6 @@
 
 <p align="center">
 <img alt="GitHub Actions Workflow Status" src="https://img.shields.io/github/actions/workflow/status/HYP3R00T/settings-organizer/ci.yml?style=for-the-badge&labelColor=%23363a4f&color=%23b7bdf8">
-<img alt="VSCode Marketplace downloads" src="https://img.shields.io/visual-studio-marketplace/i/hyperoot.settings-organizer?style=for-the-badge&labelColor=%23363a4f&color=%23b7bdf8">
 </p>
 
 # Settings Organizer for VS Code
@@ -41,17 +40,18 @@ The **Settings Organizer** extension for VS Code allows users to efficiently man
 
 1. Reads the `settings.json` file from the selected environment.
 2. Categorizes settings into predefined groups in the following order:
-    - `window`: Window management settings
-    - `workbench`: UI and layout settings
-    - `security`: Security-related configurations
-    - `explorer`: File explorer settings
-    - `terminal`: Terminal behavior and appearance
-    - `editor`: Code editor preferences
-    - `git`: Git integration settings
-    - `extensions`: Extension-related configurations
-    - `remote`: Remote development settings
+   - `window`: Window management settings
+   - `workbench`: UI and layout settings
+   - `security`: Security-related configurations
+   - `explorer`: File explorer settings
+   - `terminal`: Terminal behavior and appearance
+   - `editor`: Code editor preferences
+   - `git`: Git integration settings
+   - `extensions`: Extension-related configurations
+   - `remote`: Remote development settings
 
-    Additionally, it separately organizes language-specific settings and miscellaneous settings that do not fall under the predefined categories.
+   Additionally, it separately organizes language-specific settings and miscellaneous settings that do not fall under the predefined categories.
+
 3. Sorts language-specific and miscellaneous settings separately.
 4. Saves the organized settings back to the file.
 
